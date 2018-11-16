@@ -19,8 +19,8 @@ type Expr =
         description: string
     }
 
-type Component =
+type Fragment =
     | Expr of Expr
     | Text of string
 
-type Document = Component list
+type Document = Fragment list
