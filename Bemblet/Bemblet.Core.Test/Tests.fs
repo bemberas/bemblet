@@ -7,16 +7,19 @@ open Xunit
 open Ast
 open FParsec.CharParsers
 
-let assertParseError template =
+let parseOrFail template =
     match Parser.parse template with
-    | ParserResult.Success (result, state, pos) -> failwith "Expected parser to fail"
-    | ParserResult.Failure (message, error, state) -> Assert.True(true)
-
-let assertParsesTo template expected =
-    match Parser.parse template with
-    | ParserResult.Success (result, state, pos) -> Assert.Equal(expected, result)
+    | ParserResult.Success (result, state, pos) -> result
     | ParserResult.Failure (message, error, state) -> failwith message
 
+let assertParseError template =
+    match Parser.parse template with
+    | ParserResult.Success _ -> failwith "Expected parser to fail"
+    | ParserResult.Failure _ -> Assert.True(true)
+    
+
+let assertParsesTo template expected =
+    Assert.Equal(expected, parseOrFail template)
 
 [<Fact>]
 let ``Empty template yields empty component list`` () =
