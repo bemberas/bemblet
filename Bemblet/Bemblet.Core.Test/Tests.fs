@@ -73,4 +73,4 @@ let ``Free-form closing expression bracket is parsed as text`` () =
 
 [<Fact>]
 let ``Empty identifiers are not allowed`` () =
-    assertParseError "{{:a:}}"
+    assertParseError "{{::}}"
