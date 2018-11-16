@@ -96,6 +96,8 @@ let ``Escape sequences`` () =
     assertParsesToFlattened "\\\\" [ Text "\\" ]
     assertParsesToFlattened "\\\\\\"   [ Text "\\\\" ]
     assertParsesToFlattened "\\\\\\\\" [ Text "\\\\" ]
+    assertParsesToFlattened "\\\\\\{{" [ Text "\\{{" ]
+    assertParseError "\\\\{{"
 
     assertParsesToFlattened
         "foo\\\\{{foo:bar:baz}}"
