@@ -1,4 +1,4 @@
-﻿module Tests
+module Tests
 
 open System
 open Xunit
@@ -19,6 +19,12 @@ let assertParseError template =
 
 let assertParsesTo template expected =
     Assert.StrictEqual(expected, parseOrFail template)
+
+let assertParsesToFlattened template expected =
+    Assert.StrictEqual(
+        expected |> flatten,
+        template |> parseOrFail |> flatten
+        )
 
 [<Fact>]
 let ``Empty template yields empty component list`` () =
@@ -83,3 +89,24 @@ let ``Flatten works`` () =
         [ Text "foobarbaz" ],
         flatten [ Text "foo"; Text "bar"; Text "baz"; ]
     )
+
+[<Fact>]
+let ``Escape sequences`` () =
+    assertParsesToFlattened "\\{{" [ Text "{{" ]
+    assertParsesToFlattened "\\\\" [ Text "\\" ]
+    assertParsesToFlattened "\\\\\\"   [ Text "\\\\" ]
+    assertParsesToFlattened "\\\\\\\\" [ Text "\\\\" ]
+
+    assertParsesToFlattened
+        "foo\\\\{{foo:bar:baz}}"
+        [
+            Text "foo\\"
+            Expr {
+                symbol = "foo"
+                kind = { name = "bar"; hints = [] }
+                description = "baz"
+            }
+        ]
+
+    assertParsesToFlattened
+        "foo\\{{foo:bar:baz}}" [ Text "foo{{foo:bar:baz}}" ]

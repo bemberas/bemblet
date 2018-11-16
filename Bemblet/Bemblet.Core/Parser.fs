@@ -36,20 +36,31 @@ let exprContent =
              description = description;
          })
 
+let escape =
+    skipChar '\\' >>. choice [
+        pstring "\\"
+        pstring "{{"
+    ]
+
 let expr = between openExpr closeExpr exprContent
 
-let text =
-    (manyCharsTill anyChar (lookAhead (openExpr <|> eof)))
+let closeText =
+    choice [
+        openExpr
+        eof
+        escape >>% ()
+    ]
+    |> lookAhead
 
-let exprFrag = expr |>> Expr
-let textFrag = text |>> Text
+let text = (manyCharsTill anyChar closeText)
 
 let frag =
     choice [
-        exprFrag
-        textFrag
+        attempt escape |>> Text
+        expr |>> Expr
+        text |>> Text
     ]
 
 let document = manyTill frag eof
 
-let parse template = run document template
+let parse = run document
