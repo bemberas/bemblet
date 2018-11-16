@@ -16,17 +16,15 @@ let openExpr = skipString "{{"
 let closeExpr = skipString "}}"
 let exprFieldSep = skipChar ':'
 
-
 let identifier =
     let isIdentifierFirstChar c = isLetter c || c = '_'
     let isIdentifierChar c = isLetter c || isDigit c || c = '_'
     many1Satisfy2L isIdentifierFirstChar isIdentifierChar "identifier"
-    
 
 let description =
     manyCharsTill anyChar (lookAhead (closeExpr <|> exprFieldSep))
 
-let exprContent = 
+let exprContent =
     let symbol = identifier .>> exprFieldSep
     let kind = identifier .>> exprFieldSep
 
@@ -38,8 +36,7 @@ let exprContent =
              description = description;
          })
 
-
-let expr = between openExpr closeExpr exprContent 
+let expr = between openExpr closeExpr exprContent
 
 let text =
     (manyCharsTill anyChar (lookAhead (openExpr <|> eof)))
