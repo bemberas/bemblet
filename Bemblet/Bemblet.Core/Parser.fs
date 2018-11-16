@@ -30,13 +30,13 @@ let exprContent =
     let symbol = identifier .>> exprFieldSep
     let kind = identifier .>> exprFieldSep
 
-    pipe3    symbol kind description
-        (fun symbol kind description ->
-            {
-                symbol = symbol;
-                kind = { name = kind; constraints = [] }
-                description = description;
-            })
+    pipe3 symbol kind description
+     (fun symbol kind description ->
+         {
+             symbol = symbol;
+             kind = { name = kind; constraints = [] }
+             description = description;
+         })
 
 
 let expr = between openExpr closeExpr exprContent 
