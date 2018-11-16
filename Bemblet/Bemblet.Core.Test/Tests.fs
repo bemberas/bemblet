@@ -22,12 +22,12 @@ let ``Empty template yields empty component list`` () =
 [<Fact>]
 let ``Single expression`` () =
     assertParsesTo
-        "{{foo:string}}"
+        "{{foo:string:This is the description}}"
         {   components = [
                 Expr {
                     symbol = "foo";
                     kind = { name = "string"; constraints = []; };
-                    description = "";
+                    description = "This is the description";
                 }
             ];
         }

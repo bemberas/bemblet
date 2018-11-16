@@ -14,6 +14,7 @@ let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
 
 let openExpr = skipString "{{"
 let closeExpr = skipString "}}"
+let exprFieldSep = skipChar ':'
 
 
 let identifier =
@@ -22,17 +23,19 @@ let identifier =
     many1Satisfy2L isIdentifierFirstChar isIdentifierChar "identifier"
     
 
-let exprContent = 
-    let symbol = identifier .>> (skipChar ':')
-    let kind = identifier
-    let description = identifier
+let description =
+    manyCharsTill anyChar (lookAhead (closeExpr <|> exprFieldSep))
 
-    pipe2    symbol kind
-        (fun symbol kind ->
+let exprContent = 
+    let symbol = identifier .>> exprFieldSep
+    let kind = identifier .>> exprFieldSep
+
+    pipe3    symbol kind description
+        (fun symbol kind description ->
             {
                 symbol = symbol;
                 kind = { name = kind; constraints = [] }
-                description = "";
+                description = description;
             })
 
 
