@@ -49,7 +49,6 @@ let textComp = text |>> Text
 
 let comp = exprComp <|> textComp
 
-let document =
-    (manyTill comp eof) |>> fun x -> { components = x; }
+let document = manyTill comp eof
 
 let parse template = run document template

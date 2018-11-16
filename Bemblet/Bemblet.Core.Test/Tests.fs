@@ -18,7 +18,7 @@ let assertParseError template =
     | ParserResult.Failure _ -> Assert.True(true)
 
 let assertParsesTo template expected =
-    Assert.StrictEqual(expected, (parseOrFail template).components)
+    Assert.StrictEqual(expected, parseOrFail template)
 
 [<Fact>]
 let ``Empty template yields empty component list`` () =

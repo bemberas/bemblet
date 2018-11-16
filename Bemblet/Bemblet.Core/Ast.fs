@@ -23,7 +23,4 @@ type Component =
     | Expr of Expr
     | Text of string
 
-type Document =
-    {
-        components: Component list
-    }
+type Document = Component list
