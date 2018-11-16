@@ -47,7 +47,11 @@ let text =
 let exprComp = expr |>> Expr
 let textComp = text |>> Text
 
-let comp = exprComp <|> textComp
+let comp =
+    choice [
+        exprComp
+        textComp
+    ]
 
 let document = manyTill comp eof
 
