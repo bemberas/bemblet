@@ -41,14 +41,13 @@ let exprContent =
 
 let expr = between openExpr closeExpr exprContent 
 
-let verbatim =
+let text =
     (manyCharsTill anyChar (lookAhead (openExpr <|> eof)))
 
-
 let exprComp = expr |>> Expr
-let verbatimComp = verbatim |>> Verbatim
+let textComp = text |>> Text
 
-let comp = exprComp <|> verbatimComp
+let comp = exprComp <|> textComp
 
 let document =
     (manyTill comp eof) |>> fun x -> { components = x; }

@@ -21,7 +21,7 @@ type Expr =
 
 type Component =
     | Expr of Expr
-    | Verbatim of string
+    | Text of string
 
 type Document =
     {

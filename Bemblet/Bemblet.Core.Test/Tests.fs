@@ -41,30 +41,30 @@ let ``Single expression`` () =
 let ``Verbatim text only`` () =
     assertParsesTo
         "foo bar baz"
-        { components = [ Verbatim "foo bar baz" ] }
+        { components = [ Text "foo bar baz" ] }
 
 [<Fact>]
-let ``Verbatim text interleaved with expressions`` () =
+let ``Expression in middle of text`` () =
     assertParsesTo
         "begin{{fourteen:thirtyTwo:One hundred and thirty six}}end"
         {   components = [
-                Verbatim "begin"
+                Text "begin"
                 Expr {
                     symbol = "fourteen";
                     kind = { name = "thirtyTwo"; constraints = []; };
                     description = "One hundred and thirty six";
                 }
-                Verbatim "end"
+                Text "end"
             ];
         }
 
 [<Fact>]
-let ``Free-form closing expression bracket is parsed as verbatim`` () =
+let ``Free-form closing expression bracket is parsed as text`` () =
     assertParsesTo
         "asd }} asd"
         {
             components = [
-                Verbatim "asd }} asd"
+                Text "asd }} asd"
             ]
         }
 
