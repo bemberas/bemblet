@@ -112,3 +112,15 @@ let ``Escape sequences`` () =
 
     assertParsesToFlattened
         "foo\\{{foo:bar:baz}}" [ Text "foo{{foo:bar:baz}}" ]
+
+[<Fact>]
+let ``Spaces around symbol/type/description are ignored`` () =
+    assertParsesTo
+        "{{\tfoo : bar \t \t : baz \t}}"
+        [
+            Expr {
+                symbol = "foo"
+                kind = { name = "bar"; hints = [] }
+                description = "baz"
+            }
+        ]

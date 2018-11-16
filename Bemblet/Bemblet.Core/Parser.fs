@@ -12,6 +12,15 @@ let (<!>) (p: Parser<_,_>) label : Parser<_,_> =
         printfn "%A: Leaving %s (%A)" stream.Position label reply.Status
         reply
 
+let wsCharArray = [| ' '; '\t' |] 
+
+let wsChar =
+    wsCharArray
+    |> Seq.map skipChar
+    |> choice
+
+let ws = many wsChar
+
 let openExpr = skipString "{{"
 let closeExpr = skipString "}}"
 let exprFieldSep = skipChar ':'
@@ -22,11 +31,16 @@ let identifier =
     many1Satisfy2L isIdentifierFirstChar isIdentifierChar "identifier"
 
 let description =
-    manyCharsTill anyChar (lookAhead (closeExpr <|> exprFieldSep))
+    let pEnd = lookAhead (closeExpr <|> exprFieldSep)
+    ws >>. manyCharsTill anyChar pEnd
+      |>> (fun x -> x.TrimEnd(wsCharArray))
+
+let identAndSep = ws >>. identifier .>> ws .>> exprFieldSep
 
 let exprContent =
-    let symbol = identifier .>> exprFieldSep
-    let kind = identifier .>> exprFieldSep
+
+    let symbol = identAndSep
+    let kind   = identAndSep
 
     pipe3 symbol kind description
      (fun symbol kind description ->
@@ -41,6 +55,7 @@ let escape =
         pstring "\\"
         pstring "{{"
     ]
+
 
 let expr = between openExpr closeExpr exprContent
 
