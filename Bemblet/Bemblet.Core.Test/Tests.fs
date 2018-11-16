@@ -5,9 +5,13 @@ open Xunit
 
 
 open Ast
+open FParsec.CharParsers
 
-let assertParsesTo template ast =
-    Assert.Equal(ast, Parser.parse template)
+let assertParsesTo template expected =
+    match Parser.parse template with
+    | ParserResult.Success (result, state, pos) -> Assert.Equal(expected, result)
+    | ParserResult.Failure (message, error, state) -> failwith message
+
 
 [<Fact>]
 let ``Empty template yields empty component list`` () =
