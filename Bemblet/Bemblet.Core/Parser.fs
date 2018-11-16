@@ -42,7 +42,7 @@ let exprContent =
 let expr = between openExpr closeExpr exprContent 
 
 let verbatim =
-    (manyCharsTill anyChar (openExpr <|> eof))
+    (manyCharsTill anyChar (lookAhead (openExpr <|> eof)))
 
 
 let exprComp = expr |>> Expr

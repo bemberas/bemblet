@@ -41,7 +41,7 @@ let ``Verbatim text only`` () =
 [<Fact>]
 let ``Verbatim text interleaved with expressions`` () =
     assertParsesTo
-        "begin{{fourteen:thirtyTwo:One hundred and thiry six}}end"
+        "begin{{fourteen:thirtyTwo:One hundred and thirty six}}end"
         {   components = [
                 Verbatim "begin"
                 Expr {
