@@ -1,6 +1,6 @@
 ﻿module Ast
 
-type Constraint =
+type Hint =
     {
         key: string
         value: string
@@ -9,7 +9,7 @@ type Constraint =
 type Kind =
     {
         name: string
-        constraints: Constraint list
+        hints: Hint list
     }
 
 type Expr =

@@ -34,7 +34,7 @@ let exprContent =
      (fun symbol kind description ->
          {
              symbol = symbol;
-             kind = { name = kind; constraints = [] }
+             kind = { name = kind; hints = [] }
              description = description;
          })
 

@@ -31,7 +31,7 @@ let ``Single expression`` () =
         [
             Expr {
                 symbol = "foo";
-                kind = { name = "string"; constraints = []; };
+                kind = { name = "string"; hints = []; };
                 description = "This is the description";
             }
         ]
@@ -48,7 +48,7 @@ let ``Expression in middle of text`` () =
             Text "begin"
             Expr {
                 symbol = "fourteen";
-                kind = { name = "thirtyTwo"; constraints = []; };
+                kind = { name = "thirtyTwo"; hints = []; };
                 description = "One hundred and thirty six";
             }
             Text "end"
@@ -73,7 +73,7 @@ let ``Two expressions back to back`` () =
     assertParsesTo
         "{{foo:bar:baz}}{{foo:bar:baz}}"
         [
-            Expr { symbol = "foo"; kind = { name = "bar"; constraints = [] }; description = "baz" }
-            Expr { symbol = "foo"; kind = { name = "bar"; constraints = [] }; description = "baz" }
+            Expr { symbol = "foo"; kind = { name = "bar"; hints = [] }; description = "baz" }
+            Expr { symbol = "foo"; kind = { name = "bar"; hints = [] }; description = "baz" }
         ]
 
