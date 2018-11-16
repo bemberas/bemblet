@@ -7,6 +7,11 @@ open Xunit
 open Ast
 open FParsec.CharParsers
 
+let assertParseError template =
+    match Parser.parse template with
+    | ParserResult.Success (result, state, pos) -> failwith "Expected parser to fail"
+    | ParserResult.Failure (message, error, state) -> Assert.True(true)
+
 let assertParsesTo template expected =
     match Parser.parse template with
     | ParserResult.Success (result, state, pos) -> Assert.Equal(expected, result)
@@ -52,3 +57,17 @@ let ``Verbatim text interleaved with expressions`` () =
                 Verbatim "end"
             ];
         }
+
+[<Fact>]
+let ``Free-form closing expression bracket is parsed as verbatim`` () =
+    assertParsesTo
+        "asd }} asd"
+        {
+            components = [
+                Verbatim "asd }} asd"
+            ]
+        }
+
+[<Fact>]
+let ``Empty identifiers are not allowed`` () =
+    assertParseError "{{:a:}}"
