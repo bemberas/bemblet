@@ -44,15 +44,15 @@ let expr = between openExpr closeExpr exprContent
 let text =
     (manyCharsTill anyChar (lookAhead (openExpr <|> eof)))
 
-let exprComp = expr |>> Expr
-let textComp = text |>> Text
+let exprFrag = expr |>> Expr
+let textFrag = text |>> Text
 
-let comp =
+let frag =
     choice [
-        exprComp
-        textComp
+        exprFrag
+        textFrag
     ]
 
-let document = manyTill comp eof
+let document = manyTill frag eof
 
 let parse template = run document template
