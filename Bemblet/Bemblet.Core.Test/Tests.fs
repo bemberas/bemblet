@@ -37,3 +37,18 @@ let ``Verbatim text only`` () =
     assertParsesTo
         "foo bar baz"
         { components = [ Verbatim "foo bar baz" ] }
+
+[<Fact>]
+let ``Verbatim text interleaved with expressions`` () =
+    assertParsesTo
+        "begin{{fourteen:thirtyTwo:One hundred and thiry six}}end"
+        {   components = [
+                Verbatim "begin"
+                Expr {
+                    symbol = "fourteen";
+                    kind = { name = "thirtyTwo"; constraints = []; };
+                    description = "One hundred and thirty six";
+                }
+                Verbatim "end"
+            ];
+        }
