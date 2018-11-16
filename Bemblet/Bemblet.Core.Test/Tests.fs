@@ -77,3 +77,9 @@ let ``Two expressions back to back`` () =
             Expr { symbol = "foo"; kind = { name = "bar"; hints = [] }; description = "baz" }
         ]
 
+[<Fact>]
+let ``Flatten works`` () =
+    Assert.StrictEqual(
+        [ Text "foobarbaz" ],
+        flatten [ Text "foo"; Text "bar"; Text "baz"; ]
+    )

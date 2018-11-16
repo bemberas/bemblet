@@ -24,3 +24,13 @@ type Fragment =
     | Text of string
 
 type Document = Fragment list
+
+let flatten document =
+    List.foldBack
+        (fun x xs ->
+            match x :: xs with
+            | Text t1 :: Text t2 :: xs -> Text (t1 + t2) :: xs
+            | x -> x
+        )
+        document
+        []
