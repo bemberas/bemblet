@@ -64,13 +64,26 @@ let ``Expression in middle of text`` () =
 [<Fact>]
 let ``Free-form closing expression bracket is parsed as text`` () =
     assertParsesTo
-        "asd }} asd"
-        {
-            components = [
-                Text "asd }} asd"
-            ]
-        }
+        "asd }} asd" { components = [ Text "asd }} asd" ] }
+
+[<Fact>]
+let ``Unclosed expression bracket fails to parse`` () =
+    assertParseError "asd {{foo:bar:baz"
+    assertParseError "asd {{foo:bar "
 
 [<Fact>]
 let ``Empty identifiers are not allowed`` () =
     assertParseError "{{::}}"
+
+
+[<Fact>]
+let ``Two expressions back to back`` () =
+    assertParsesTo
+        "{{foo:bar:baz}}{{foo:bar:baz}}"
+        {
+            components = [
+                Expr { symbol = "foo"; kind = { name = "bar"; constraints = [] }; description = "baz" }
+                Expr { symbol = "foo"; kind = { name = "bar"; constraints = [] }; description = "baz" }
+            ]
+        }
+
